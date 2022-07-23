@@ -1,8 +1,6 @@
-
 target_locations = {'r': 1, 'g': 5, 'b': 7, 'y': 3} 
 target_carry_path = {'r': ['lower-left'], 'g': ['upper-left'], 
                      'b': ['upper-left'], 'y': ['right','lower-right'] }
-
 class Edge():
     def __init__(self, to, w):
         self.to = to
@@ -104,6 +102,7 @@ def generate_backward_path(forward_path):
 if __name__=="__main__":
     work_order = ['r','g','b','y']
     init_pos = 0
+    init_direction = 'down'
     path = [init_pos]
     for w in work_order:
         current = path.pop()
@@ -126,5 +125,27 @@ if __name__=="__main__":
     for i in range(len(shortest_path)-1):
         direction = connections[shortest_path[i]][shortest_path[i+1]]
         path.append(direction)
+
     print(path)
 
+    direction_array = ['up','down','right','left',  
+                       'upper-left','upper-right','lower-left','lower-right']
+
+    current = init_direction 
+    INIT_VAL = 0
+    next = INIT_VAL 
+    commands = []
+    while True:
+        while next not in direction_array: 
+            if next != INIT_VAL:
+                commands.append(next) 
+            next = path.pop(0)
+        # print(current, next)
+        command = command_table[current][next]
+        commands.append(command)
+        if len(path)==0:
+            break
+        current = next
+        next = path.pop(0)
+
+    print(commands)
