@@ -23,14 +23,13 @@ for f in filters:
     mask = cv2.inRange(hsv, lower_color, upper_color)
     output = cv2.bitwise_and(hsv, hsv, mask = mask)
 
-    chips = output
-    chips_gray = cv2.cvtColor(chips, cv2.COLOR_BGR2GRAY)
-    chips_preprocessed = cv2.GaussianBlur(chips_gray, (5, 5), 0)
-    _, chips_binary = cv2.threshold(chips_preprocessed, 100, 255, cv2.THRESH_BINARY)
-    chips_contours, _ = cv2.findContours(chips_binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    min_chip_area = 60
-    large_contours = [cnt for cnt in chips_contours if cv2.contourArea(cnt) > min_chip_area]
-    bounding_img = np.copy(chips)
+    gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
+    preprocessed = cv2.GaussianBlur(gray, (5, 5), 0)
+    _, binary = cv2.threshold(preprocessed, 100, 255, cv2.THRESH_BINARY)
+    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    min_area = 60
+    large_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > min_area]
+    bounding_img = np.copy(output)
     for contour in large_contours:
     	rect = cv2.minAreaRect(contour)
     	box = cv2.boxPoints(rect)
