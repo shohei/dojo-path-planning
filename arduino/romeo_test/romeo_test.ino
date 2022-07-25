@@ -47,9 +47,8 @@ void loop()
   { 
     case BTN_FORWARD:
       {
-        digitalWrite(M1_DIR, HIGH);
-        digitalWrite(M2_DIR, HIGH);
-        Serial.println("Motors = Forward"); // Print the key that was pressed
+        Serial.println("test"); // Print the key that was pressed
+        test();
         break;
       }
     case BTN_STOP:
@@ -68,16 +67,16 @@ void loop()
       }
     case BTN_HALF_SPEED:
       {
-        analogWrite(M1_EN, 128);
-        analogWrite(M2_EN, 128);
-        Serial.println("Motors = 50% Speed");
+        Serial.println("FW");
+        FW();
         break;
       }
     case BTN_FULL_SPEED:
       {
-        digitalWrite(M1_EN, HIGH);
-        digitalWrite(M2_EN, HIGH);
-        Serial.println("Motors = Full Speed");
+        Serial.println("R45");
+        R45();
+        // Serial.println("Motors = Full Speed");
+        break;
       }
     case BTN_NONE:
       {
@@ -109,4 +108,124 @@ int Read_Buttons()
   if (adc_key_in < 990)  return BTN_FULL_SPEED;
 
   return BTN_NONE;  // when all others fail, return this...
+}
+
+#define STRAIGHT_DELAY 1300
+#define ROTATIONAL_DELAY_45 500 
+#define STRAIGHT_SPEED 200 
+#define ROTATIONAL_SPEED 200 
+
+void FW(){
+    //direction
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, LOW);
+    //movement
+    analogWrite(M1_EN, STRAIGHT_SPEED);
+    analogWrite(M2_EN, STRAIGHT_SPEED);
+    delay(STRAIGHT_DELAY);
+    digitalWrite(M1_EN,LOW);  
+    digitalWrite(M2_EN,LOW); 
+}
+
+void B(){
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, HIGH);
+    //movement
+    analogWrite(M1_EN, STRAIGHT_SPEED);
+    analogWrite(M2_EN, STRAIGHT_SPEED);
+    delay(STRAIGHT_DELAY);
+    digitalWrite(M1_EN,LOW);  
+    digitalWrite(M2_EN,LOW); 
+}
+
+void R45(){
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, HIGH);
+    //rotation
+    analogWrite(M1_EN, ROTATIONAL_SPEED);
+    analogWrite(M2_EN, ROTATIONAL_SPEED);
+    delay(ROTATIONAL_DELAY_45);
+    digitalWrite(M1_EN,LOW);  
+    digitalWrite(M2_EN,LOW); 
+}
+
+void L45(){
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, LOW);
+    //rotation
+    analogWrite(M1_EN, ROTATIONAL_SPEED);
+    analogWrite(M2_EN, ROTATIONAL_SPEED);
+    delay(ROTATIONAL_DELAY_45);
+    digitalWrite(M1_EN,LOW);  
+    digitalWrite(M2_EN,LOW); 
+}
+
+void R45F(){
+    R45();
+    FW();
+};
+
+void R90F(){
+    R45();
+    R45();
+    FW();
+}
+
+void R135F(){
+    R45();
+    R45();
+    R45();
+    FW();
+}
+
+void R180F(){
+    R45();
+    R45();
+    R45();
+    R45();
+    FW();
+}
+
+void L135F(){
+  L45();
+  L45();
+  L45();
+  FW();
+}
+
+void L90F(){
+  L45();
+  L45();
+  FW();
+}
+
+void L45F(){
+  L45();
+  FW();
+}
+
+void L45B(){
+  L45();
+  B();
+}
+
+void test(){
+  L90F();
+  R135F();
+  B();
+  L135F();
+  R90F();
+  R135F();
+  B();
+  L45F();
+  L90F();
+  R135F();
+  B();
+  R45F();
+  L90F();
+  R180F();
+  R45F();
+  B();
+  L45B();
+  L135F();
 }

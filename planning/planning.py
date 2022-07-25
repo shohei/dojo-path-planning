@@ -126,7 +126,7 @@ if __name__=="__main__":
         direction = connections[shortest_path[i]][shortest_path[i+1]]
         path.append(direction)
 
-    print(path)
+    #print(path)
 
     direction_array = ['up','down','right','left',  
                        'upper-left','upper-right','lower-left','lower-right']
